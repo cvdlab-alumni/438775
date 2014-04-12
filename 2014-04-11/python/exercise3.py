@@ -424,12 +424,16 @@ modtot = STRUCT(AA(COLOR(BLUE))(MKPOLS(mod1D)+MKPOLS(mod2D)+MKPOLS(mod11D)))
 #VIEW(modtot)
 
 
-moltiModelli=[S([1,2])([10,10])(modtot)]
-moltiModelli=T(2)(15)(moltiModelli)
-moltiModelli=(S(3)(random.random()))(moltiModelli)
-moltiModelli1=T(2)(15)(moltiModelli)
-moltiModelli1=S(3)(random.random())(moltiModelli)
-moltiModelli2=T(2)(15)(moltiModelli)
-moltiModelli2=S(3)(random.random())(moltiModelli)
+moltiModelli=S([1,2])([2,2])(modtot)
+moltiModelli=T(1)(30)(moltiModelli)
+moltiModelli=S(3)(random.random())(moltiModelli)
+moltiModelli1=T(1)(30)(moltiModelli)
+moltiModelli1=S(3)(random.random())(moltiModelli1)
+moltiModelli2=T(1)(30)(moltiModelli)
+moltiModelli2=S(3)(random.random())(moltiModelli1)
+moltiModelli=STRUCT([moltiModelli, moltiModelli1, moltiModelli2])
+moltiModelli=T(1)(20)(moltiModelli) 
 
-VIEW([moltiModelli, moltiModelli1,moltiModelli2])
+modtot=T(2)(40)(modtot) 
+
+VIEW(STRUCT([ modtot,moltiModelli1,edificioPrimario]))

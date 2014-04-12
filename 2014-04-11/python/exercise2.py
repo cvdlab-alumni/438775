@@ -112,7 +112,11 @@ corniceFinestra=DIFFERENCE([CUBOID([2,1,3]), T([1,3])([0.1,0.1])(CUBOID([1.8,1,2
 finestra=STRUCT([finestra,corniceFinestra])
 #VIEW(finestra)
 
-#costruisco la sezione bassa del muro
+######### muro nord #############
+
+riempimento=T(1)(-1)(CUBOID([41,0,40]))
+
+#costruisco la sezione bassa del muro nord
 finestre=T([1,3])([1,7])(finestra)
 finestre=STRUCT([finestre, T(1)(3)(finestre)])
 finestre=STRUCT([finestre, T(1)(8)(finestre)])
@@ -137,11 +141,14 @@ ac=T(1)(19.5)(arcoSuperiore)
 nordMid=STRUCT([nordMid,ac])
 nordTop=STRUCT([T(3)(12)(nordMid)])
 
-nord=STRUCT([nordMid,nordTop, nordLow, separatore])
+nord=STRUCT([nordMid,nordTop, nordLow, separatore, riempimento])
 #VIEW(nord)
 
 
 #################################costruisco la facciata est
+
+#riempimento
+riempimento=T(1)(-1)(CUBOID([55,0,40]))
 
 #low
 centro=26.5
@@ -162,7 +169,7 @@ f6s=T(1)((centro-20)*2)(f6)
 
 finestre=STRUCT([f1,f2,f3,f4,f5,f6,f1s,f2s,f3s,f4s,f5s,f6s])
 estLow=STRUCT([T(1)(centro)(portone),finestre])
-VIEW(estLow)
+#VIEW(estLow)
 
 #mid
 a1=T(1)(2.8)(arcoSuperiore)
@@ -171,12 +178,39 @@ a3=T(1)(8.4)(arcoSuperiore)
 a4=T(1)(11.2)(arcoSuperiore)
 a5=T(1)(17)(arcoSuperiore)
 a6=T(1)(20)(arcoSuperiore)
-
 a1s=T(1)((centro-2.8)*2)(a1)
 a2s=T(1)((centro-5.6)*2)(a2)
 a3s=T(1)((centro-8.4)*2)(a3)
 a4s=T(1)((centro-11.2)*2)(a4)
 a5s=T(1)((centro-17)*2)(a5)
 a6s=T(1)((centro-20)*2)(a6)
-estMid=STRUCT([a1,a2,a3,a4,a5,a6,a1s,a2s,a3s,a4s,a5s,a6s, estLow])
-VIEW(estMid)
+ac=T(1)(centro)(arcoSuperiore)
+estMid=STRUCT([a1,a2,a3,a4,a5,a6,a1s,a2s,a3s,a4s,a5s,a6s, ac])
+
+
+#top
+estTop=STRUCT([T(3)(12)(estMid)])
+
+#separatore
+#separatore tra piani
+separatore=CYLINDER([0.25,55])(6)
+separatore=T([1,2,3])([-1,1,11.5])(R([1,3])(-PI/2)(separatore))
+separatore=STRUCT([separatore,T(3)(12)]*2)
+#VIEW(separatore)
+
+
+#mock-up
+est=T(1)(1)(STRUCT([estMid,estTop,estLow,separatore,riempimento]))
+west=R([2,1])(PI)(est)
+west=T([1,2])([55, -41])(west)
+we=STRUCT([est,west])
+we=T(1)(41)(R([2,1])(PI/2)(we))
+#we=STRUCT([we]+MKPOLS(([[0,0],[56,0]],[[0,1]])))
+
+nord=T(1)(1)(nord)
+sud=R([2,1])(PI)(nord)
+sud=T([1,2])([41, -55])(sud)
+ns=STRUCT([nord,sud])
+
+mockUp=STRUCT([we,ns])
+VIEW(mockUp)

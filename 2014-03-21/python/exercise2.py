@@ -69,6 +69,7 @@ arcoSuperiore=STRUCT([colonnina, arcoSuperiore])
 #capitello sotto
 capitello=T(3)(-2.2)(capitello)
 arcoSuperiore=STRUCT([capitello, arcoSuperiore])
+VIEW(arcoSuperiore)
 
 #portone
 portInt=COLOR(BLACK)(cilindro([PI, 1.3, 0.05]))
@@ -86,12 +87,12 @@ pil6=T([1,2])([-1.5,-2])(CUBOID([0.1,2,0.15]))
 pil7=T([1,2])([-2,-2])(CUBOID([0.5,2,0.22]))
 
 portoneSuperiore=STRUCT([portoneSuperiore, pil1, pil2,pil3,pil4,pil5,pil6,pil7])
-VIEW(portoneSuperiore)
+#VIEW(portoneSuperiore)
 
 #finestrella
-fin=CUBOID([1,1.5,0.22])
+#fin=CUBOID([1,1.5,0.22])
 
 #NORD
-riempimento=CUBOID([16,5,.22])
-fasciaFinestr = STRUCT([, T(1)(0.5)] * 2)
-filaVert = STRUCT([porta, T(2)(-0.5)] * 3)
+#riempimento=CUBOID([16,5,.22])
+#fasciaFinestr = STRUCT([, T(1)(0.5)] * 2)
+#filaVert = STRUCT([porta, T(2)(-0.5)] * 3)

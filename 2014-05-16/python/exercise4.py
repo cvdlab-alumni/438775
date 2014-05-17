@@ -79,10 +79,6 @@ def diagram2cell(diagram,master,cell):
    return master
 
 
-print zeros((4,4))
-print [0,1] +[4,5]
-
-
 #####test
 ingressoPattern=[[0.3, (3.94-2.25-0.3), 0.3, 2.24, 0.3], [0.3, 2, 0.3, 3.10,0.3, 1.64], [0.3,3,0.3]]
 ingresso=assemblyDiagram(ingressoPattern)

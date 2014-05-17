@@ -54,14 +54,6 @@ def diagram2cellMatrix(diagram):
       return mat
    return diagramToCellMatrix0
 
-#filtra i V uguali tiene traccia di questo mappandoli
-def vertexSieve(master, diagram):
-   #dobbiamo separare 
-   return "ciao"
-
-
-help(boundaryOfChain)
-help(lar2boundaryFaces)
 
 def diagram2cell(diagram,master,cell):
    mat = diagram2cellMatrix(diagram)(master,cell)
@@ -70,6 +62,10 @@ def diagram2cell(diagram,master,cell):
 
    # yet to finish coding
    V, CV1, CV2, n12 = vertexSieve(master,diagram)
+   #print "V=",V
+   #print "cv1=",CV1
+   #print "cv2=",CV2
+   #print "n12=",n12
 
    #masterBoundaryFaces = boundaryOfChain(CV,FV)([cell])
    #diagramBoundaryFaces = lar2boundaryFaces(CV,FV)

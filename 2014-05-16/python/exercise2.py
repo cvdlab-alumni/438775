@@ -168,11 +168,6 @@ camera=diagram2cell(finestra, camera,46)
 camera=diagram2cell(finestra,camera, 40)
 mostraNumeroCelle(camera, CYAN,0.3)
 
-
-camera=removeCells(camera,[27,12,33])
-
-
-
 i=0.
 for val in ingressoPattern[1]:
     i = i+val 

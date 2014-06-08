@@ -36,13 +36,13 @@
         var trackballControls = new THREE.TrackballControls(camera);
 
         var webGLRenderer = new THREE.WebGLRenderer();
-        webGLRenderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
+        webGLRenderer.setClearColor(new THREE.Color(0x0C0c0c, 1.0));
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
         camera.position.set(60, 30, 0);
         camera.up = new THREE.Vector3(0,1,0);
-        camera.lookAt(scene.position);
+
 
         //add subtle ambient lighting
         var ambiColor = "#0c0c0c";
@@ -61,16 +61,17 @@
         // directionalLight1.intensity = 10;
         // scene.add(directionalLight1);
 
-        var plane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200, 300, 300) , new THREE.MeshLambertMaterial({color: 0xDDDDDD}) );
+        var plane = new THREE.Mesh(new THREE.PlaneGeometry(300, 300, 300, 300) , new THREE.MeshLambertMaterial({color: 0xDDDDDD}) );
         plane.receiveShadow=true;
         plane.castShadow=true;
         plane.rotation.x= -0.5*Math.PI;
-        plane.position.set(-70,0,0);
+        plane.position.set(-120,0,0);
         scene.add(plane);
 
         var axisHelper = new THREE.AxisHelper(3);
         scene.add(axisHelper);
 
+        camera.lookAt(plane.position);
 
 /*********************************************  START DEFINITION OF LAMP ************************************************/
 
@@ -227,6 +228,38 @@
         textHidden.visible=false;
         scene.add(textHidden);
 
+        function generateRandomSphere(sphereNumber){
+          var arrayOfSphere=[];
+          var xPos;
+          var zPos;
+          var radius;
+          var randomColor;
+          var randomFace1;
+          var randomFace2;
+          var sphereGeometry;
+          var sphereMaterial;
+          var sphere;
+
+          for(var i=0; i<sphereNumber; i++){
+            xPos = Math.random()*-120-50;
+            zPos = Math.random()*200-100;
+            radius = Math.random()*10+6;
+            randomColor = Math.random()*0xBBBBBB+5;
+            randomFace1 = Math.random()*10+2;
+            randomFace2 = Math.random()*10+2;
+            sphereGeometry = new THREE.SphereGeometry(radius, randomFace1, randomFace2);
+            sphereMaterial = new THREE.MeshLambertMaterial({color: randomColor});
+            sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            sphere.castShadow=true;
+            sphere.position.set(xPos,100,zPos);
+            arrayOfSphere[i]=sphere;
+            sphere.radius=radius;
+            scene.add(sphere);
+          }
+          return arrayOfSphere;
+        }
+        var sphereNumber=10;
+        var arrayOfSphere=generateRandomSphere(10);
 
 
         /********************************************************************************/
@@ -281,6 +314,17 @@
         var lampMoveBase2 = new TWEEN.Tween(joint1.sphere[1].rotation)
           .to({x: Math.PI/3}, 2000)
           .easing(easingLampMovement)
+          .start();
+
+        var objectFalling = new TWEEN.Tween({y:60})
+          .to({y: 0}, 700)
+          .easing(TWEEN.Easing.Bounce.Out)
+          .delay(6500)
+          .onUpdate(function(){
+            for(var i=0; i<arrayOfSphere.length; i++){
+              arrayOfSphere[i].position.y=this.y+arrayOfSphere[i].radius;
+            }
+          })
           .start();
 
         var ending = new TWEEN.Tween(directionalLight)

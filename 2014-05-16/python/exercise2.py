@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, '/home/di-folca/lar-cc-nuovo/lib/py/')
+sys.path.insert(0, '/home/di-folca/lar-cc/lib/py/')
 from sysml import *
 from splines import *
 import numpy as np
@@ -180,12 +180,12 @@ destraPattern=[[0.3, 3.73, 0.3, 3,0.3],[.3, 5.88, .3, 4.3, .3],[0.3, 3, 0.3]]
 destra= assemblyDiagram(destraPattern)
 #mostraNumeroCelle(destra, GREEN, 1)
 destra=removeCells(destra,[73,22,19,25,4,7,10,40,55,70,58,34,49])
-
+mostraNumeroCelle(destra, GREEN, 1)
 destra=[larTranslate([sommatore(ingressoPattern[0]),0,0])(destra[0]), destra[1]]
 
 casa=STRUCT(MKPOLS(ingresso)+MKPOLS(camera)+MKPOLS(destra))
 
-#VIEW(casa)
+VIEW(casa)
 
 
 ######################exercise2###########################

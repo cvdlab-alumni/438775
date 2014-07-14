@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<html>
+ <head> 
+  <title>prova</title> 
+ </head>
+ <body>
+ 
+  <!-- JavaScript libraries -->
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> 
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r67/three.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/stats.js/r11/Stats.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
+   <script src="assets/libs/TrackballControls.js"></script>
+   <script type="text/javascript" src="assets/libs/OBJLoader.js"></script> 
+  <script type="text/javascript" src="assets/libs/MTLLoader.js"></script> 
+  <script type="text/javascript" src="assets/libs/OBJMTLLoader.js"></script>
+   <script src="assets/libs/PointerLockControls.js"></script>
+   <script src="script/init.js"></script>
+  <script src="script/wall.js"></script>
+  <script src="script/pointerLock.js"></script>
+  <script src="script/loadHelper.js"></script>
+  <script type="text/javascript">
+  var trackballControls = new THREE.TrackballControls(camera);
+
+  basePlane=new THREE.Mesh(new THREE.PlaneGeometry(1200,1200,100),new THREE.MeshLambertMaterial({color: 0x1A4026}));
+  basePlane.rotation.x=-0.5*Math.PI;
+  scene.add(basePlane);
+
+var spotLight = new THREE.SpotLight( 0xffffff );
+spotLight.position.set(0,60,40);
+spotLight.lookAt(new THREE.Vector3(0,50,0));
+spotLight.intensity=4;
+scene.add(spotLight);
+
+  var mobiletto = loadKitchen(0xA00333, 0xDDDDDD, 0xEEEfff, 0x000000, 0x1A4026);
+  console.log(mobiletto);
+  // mobiletto.rotation.y=Math.PI/2;
+  scene.add(mobiletto);
+
+  var axisHelper = new THREE.AxisHelper( 100 );
+  scene.add( axisHelper );
+
+
+      // add the output of the renderer to the html element
+      $('body').append(webGLRenderer.domElement);
+      window.addEventListener( 'resize', onWindowResize, false );
+
+      animate();
+
+   function animate() {
+   	   trackballControls.update();
+      requestAnimationFrame( animate );
+      stats.update();
+      webGLRenderer.render(scene, camera);
+    }
+
+  </script>
+
+</body>
+</html>

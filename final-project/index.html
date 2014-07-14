@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<html>
+ <head> 
+  <title>final-project</title> 
+  <link rel="stylesheet" type="text/css" href="style/lookUpCamera.css" > </link>
+ </head>
+ <body>
+  <div id="blocker">
+
+    <div id="instructions">
+      <span style="font-size:40px">click option to start</span>
+      <br />
+      (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
+    </div>
+
+  </div> 
+  <!-- JavaScript libraries -->
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> 
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r67/three.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/stats.js/r11/Stats.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
+  <script type="text/javascript" src="assets/libs/OBJLoader.js"></script> 
+  <script type="text/javascript" src="assets/libs/MTLLoader.js"></script> 
+  <script type="text/javascript" src="assets/libs/OBJMTLLoader.js"></script>
+  <script src="assets/libs/PointerLockControls.js"></script>
+
+  <script src="script/init.js"></script>
+  <script src="script/pointerLock.js"></script>
+  <script src="script/control.js"></script>
+  <script src="script/selfMadeModels.js"></script>
+  <script src="script/loadHelper.js"></script>
+  <script src="script/entrance.js"></script>
+  <script src="script/kitchen.js"></script>
+  <script src="script/bedRooms.js"></script>
+  <script src="script/exterior.js"></script>
+  <script> 
+    $(function () {
+      
+
+      basePlane=new THREE.Mesh(new THREE.PlaneGeometry(1200,1200,100),new THREE.MeshLambertMaterial({color: 0x1A4026}));
+      basePlane.rotation.x=-0.5*Math.PI;
+      // scene.add(basePlane); 
+      objects.push(basePlane);
+
+ 
+      // add the output of the renderer to the html element
+      $('body').append(webGLRenderer.domElement);
+      window.addEventListener( 'resize', onWindowResize, false );
+
+      animate();
+
+   function animate() {
+      requestAnimationFrame( animate );
+      animateControls();
+      stats.update();
+      webGLRenderer.render(scene, camera);
+    }
+
+    });
+  </script>
+  
+
+ </body>
+</html>

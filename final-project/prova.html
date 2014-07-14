@@ -33,6 +33,11 @@ spotLight.lookAt(new THREE.Vector3(0,50,0));
 spotLight.intensity=4;
 scene.add(spotLight);
 
+var spotLight2 = spotLight.clone();
+spotLight2.position.set(-1110,100, 70);
+spotLight2.lookAt(-1110,50, 0);
+scene.add(spotLight2);
+
   var mobiletto = loadKitchen(0xA00333, 0xDDDDDD, 0xEEEfff, 0x000000, 0x1A4026);
   console.log(mobiletto);
   // mobiletto.rotation.y=Math.PI/2;

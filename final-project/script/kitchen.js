@@ -76,7 +76,11 @@ toIntersect.push(doorLivingRoom);
 kitchen.add(doorLivingRoom);
 
 //obj loaded
-
+var kitchen = loadKitchen(0xA00333, 0xDDDDDD, 0xEEEfff, 0x000000, 0x1A4026);
+kitchen.rotation.y=Math.PI;
+kitchen.scale.set(0.31,0.26,0.31);
+kitchen.position.set(entranceSize[0].reduce(somma)*houseScalex+80*0.315,spigolo*houseScaley,-5*spigolo*houseScalex);
+scene.add(kitchen); 
 
 //**********************************Living Room
 var livingRoom = new THREE.Object3D();

@@ -46,8 +46,11 @@ scene.add(spotLight);
 
 var house = new THREE.Object3D();
 house.rotation.x=-0.5*Math.PI;
-var houseScale=20;
-house.scale.set(houseScale*1.3,houseScale*1.3,houseScale);
+var houseScale=20
+var houseScalex=houseScale*1.3;
+var houseScaley=houseScale*1.3;
+var houseScalez=houseScale;
+house.scale.set(houseScalex,houseScaley,houseScalez);
 scene.add(house);
 
 

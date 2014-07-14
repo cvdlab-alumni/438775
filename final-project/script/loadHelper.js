@@ -62,7 +62,7 @@ function loadKitchen(generalColor, handler, top,bottom, inner){
     obj.traverse(function (child) {
       if (child instanceof THREE.Mesh) {
         child.material = material;
-        console.log(child.name);
+        // console.log(child.name);
       }
     var mesh =obj.getObjectByName('Loft16_1');
     mesh.material= new THREE.MeshLambertMaterial({color:handler,ambient:ambientLightColor, side: THREE.DoubleSide });
@@ -117,7 +117,49 @@ function loadKitchen(generalColor, handler, top,bottom, inner){
     
     parent.add(obj);
   });
+
+loader.load(objPath+'mobilettoGrande.obj', function (obj){
+    material = new THREE.MeshLambertMaterial({ color:generalColor, ambient:ambientLightColor,side: THREE.DoubleSide });
+   
+      obj.traverse(function (child) {
+        if (child instanceof THREE.Mesh) {
+          child.material = material;
+          console.log(child.name);
+      }
+    });
+    var child;
+    for(i=1; i<3;i++){
+      child = obj.children[i];
+      if(child instanceof THREE.Mesh)
+        child.material=new THREE.MeshLambertMaterial({color:handler,ambient:ambientLightColor, side: THREE.DoubleSide });
+    }
+
+    var mesh =obj.getObjectByName('Loft24_15');
+    mesh.material= new THREE.MeshLambertMaterial({color:handler,ambient:ambientLightColor, side: THREE.DoubleSide });
+
+    var mesh =obj.getObjectByName('Loft25_16');
+    mesh.material= new THREE.MeshLambertMaterial({color:handler,ambient:ambientLightColor, side: THREE.DoubleSide });
+    
+    var mesh =obj.getObjectByName('Box612_5');
+    mesh.material= new THREE.MeshLambertMaterial({color:inner,ambient:ambientLightColor, side: THREE.DoubleSide });
+    var mesh =obj.getObjectByName('Box622_8');
+    mesh.material= new THREE.MeshLambertMaterial({color:inner,ambient:ambientLightColor, side: THREE.DoubleSide });
+    var mesh =obj.getObjectByName('Box642_13');
+    mesh.material= new THREE.MeshLambertMaterial({color:inner,ambient:ambientLightColor, side: THREE.DoubleSide });
+    var mesh =obj.getObjectByName('Box652_18');
+    mesh.material= new THREE.MeshLambertMaterial({color:inner,ambient:ambientLightColor, side: THREE.DoubleSide });
+
+    var mesh = obj.getObjectByName('Box63_10');
+    mesh.material= new THREE.MeshLambertMaterial({color:bottom,ambient:ambientLightColor, side: THREE.DoubleSide });
+    
+    obj.position.set(-1110, 0, 140);
+    parent.add(obj);
+  });  
   
   return parent;  
 }
 
+function loadTableAndChairs (){
+  var parent= new THREE.Object3D();
+  parent.name='table&chair';
+}

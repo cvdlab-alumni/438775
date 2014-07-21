@@ -444,7 +444,7 @@ THREE.OBJMTLLoader.prototype = {
 
 			} else {
 
-				console.log( "THREE.OBJMTLLoader: Unhandled line " + line );
+				// console.log( "THREE.OBJMTLLoader: Unhandled line " + line );
 
 			}
 

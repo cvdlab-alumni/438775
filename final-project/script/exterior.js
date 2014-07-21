@@ -12,7 +12,7 @@ southWall.rotation.x=Math.PI/2;
 southWall.position.setY( -margine);
 exteriorWalls.add(southWall);
 
-var exteriorWestWall = makeWallCover([[spigolo,3,spigolo],[spigolo,entranceSize[1].reduce(somma)-spigolo,littleBedRoomSize[1].reduce(somma)]],[[1,1]],exteriorWallTextureW,undefined, 15, 30);
+var exteriorWestWall = makeWallCover([[spigolo,3,spigolo],[spigolo,entranceSize[1].reduce(somma)-1.64-spigolo*2,littleBedRoomSize[1].reduce(somma)+1.64+spigolo]],[[1,1]],exteriorWallTextureW,undefined, 15, 30);
 exteriorWestWall.rotation.y=-Math.PI/2;
 exteriorWestWall.position.setX(-margine);
 exteriorWalls.add(exteriorWestWall);
@@ -51,3 +51,44 @@ exteriorWalls.add(balconyWall);
 var balconyFloor= makeWallCover([[3+spigolo],[4.3+spigolo]],[],balconyFloorTexture, undefined, 5,6);
 balconyFloor.position.set(entranceSize[0].reduce(somma)+3.73+spigolo*2,kitchenSize[1].reduce(somma), spigolo+margine);
 exteriorWalls.add(balconyFloor);
+
+//load obj balcony railing
+var railing = loadRailing(0x000000);
+var scalex=houseScalex*1;
+var scalez=houseScaley*1.30;
+var scaley=houseScalez*0.6;
+railing.position.set((entranceSize[0].reduce(somma)+3.73+spigolo*5)*houseScalex,spigolo*houseScalez,-(kitchenSize[1].reduce(somma)-spigolo/3)*houseScaley);
+railing.scale.set(scalex,scaley,scalez)
+scene.add(railing);
+
+basePlane=new THREE.Mesh(new THREE.PlaneGeometry(1200,1200,600),new THREE.MeshLambertMaterial({color: 0x5c9632}));
+basePlane.rotation.x=-0.5*Math.PI;
+basePlane.position.setY(spigolo);
+scene.add(basePlane); 
+objects.push(basePlane);
+
+// load skybox
+var declareArray=['Right','Left','Up','Down','Front','Back'];
+var materialArray = [];
+for (var i = 0; i < 6; i++)
+materialArray.push(new THREE.MeshBasicMaterial({
+map: THREE.ImageUtils.loadTexture(texturePath+'SkyboxSet1/CloudyLightRays/CloudyLightRays'+declareArray[i]+'2048.png'),
+side: THREE.BackSide
+}));
+var daySkybox_material = new THREE.MeshFaceMaterial(materialArray);
+var daySkybox = new THREE.Mesh(new THREE.BoxGeometry(2048, 2048, 2048), daySkybox_material);
+daySkybox.color = new THREE.Color('#FFFFFF');
+scene.add(daySkybox);
+daySkybox.visible=false;
+
+var materialArray = [];
+for (var i = 0; i < 6; i++)
+materialArray.push(new THREE.MeshBasicMaterial({
+map: THREE.ImageUtils.loadTexture(texturePath+ "night-skybox.jpg"),
+side: THREE.BackSide
+}));
+
+var nightSkybox_material = new THREE.MeshFaceMaterial(materialArray);
+var nightSkybox = new THREE.Mesh(new THREE.BoxGeometry(8000, 8000, 8000), nightSkybox_material);
+nightSkybox.color = new THREE.Color('#FFFFFF');
+scene.add(nightSkybox);

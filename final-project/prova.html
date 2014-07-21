@@ -5,7 +5,7 @@
   <title>prova</title> 
  </head>
  <body>
- 
+   <video id="video" src="assets/movies/video.mp4" controls="true" hidden="true" ></video>
   <!-- JavaScript libraries -->
   <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> 
   <script src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r67/three.min.js"></script>
@@ -17,9 +17,11 @@
   <script type="text/javascript" src="assets/libs/OBJMTLLoader.js"></script>
    <script src="assets/libs/PointerLockControls.js"></script>
    <script src="script/init.js"></script>
-  <script src="script/wall.js"></script>
-  <script src="script/pointerLock.js"></script>
+  <script src="script/selfMadeModels.js" type="text/javascript"></script>
+  <!--<script src="script/pointerLock.js"></script>-->
   <script src="script/loadHelper.js"></script>
+  <script src="script/rayCasterOpenableObject.js"></script>
+   <script src="assets/libs/PathControls.js"></script> 
   <script type="text/javascript">
   var trackballControls = new THREE.TrackballControls(camera);
 
@@ -27,21 +29,14 @@
   basePlane.rotation.x=-0.5*Math.PI;
   scene.add(basePlane);
 
-var spotLight = new THREE.SpotLight( 0xffffff );
-spotLight.position.set(0,60,40);
-spotLight.lookAt(new THREE.Vector3(0,50,0));
-spotLight.intensity=4;
-scene.add(spotLight);
+  ambientLight.visible=true;
+  directionalLight.visible=true;
 
-var spotLight2 = spotLight.clone();
-spotLight2.position.set(-1110,100, 70);
-spotLight2.lookAt(-1110,50, 0);
-scene.add(spotLight2);
+  var mobile=loadChandalier('lampadario.mtl');
+  mobile.position.setY(10);
+  scene.add(mobile);
+  toIntersect.push(mobile);
 
-  var mobiletto = loadKitchen(0xA00333, 0xDDDDDD, 0xEEEfff, 0x000000, 0x1A4026);
-  console.log(mobiletto);
-  // mobiletto.rotation.y=Math.PI/2;
-  scene.add(mobiletto);
 
   var axisHelper = new THREE.AxisHelper( 100 );
   scene.add( axisHelper );
@@ -54,7 +49,8 @@ scene.add(spotLight2);
       animate();
 
    function animate() {
-   	   trackballControls.update();
+      // mobile.update();
+   	  trackballControls.update();
       requestAnimationFrame( animate );
       stats.update();
       webGLRenderer.render(scene, camera);

@@ -45,7 +45,7 @@ doorWall.position.set(spigolo+primoblocco,spigolo+yscala*2-margine,spigolo, spig
 entrance.add(doorWall);
 
 //big wall
-var simpleWallFace=[[3],[spigolo, 3.10,yscala*2]];
+var simpleWallFace=[[3],[3.10+yscala*2-1.64]];
 simpleWall=makeWallCover(simpleWallFace,[],entranceWallTexture);
 simpleWall.rotation.y=-Math.PI/2;
 simpleWall.position.set(spigolo+primoblocco-margine, (spigolo+yscala*2),spigolo);
@@ -56,7 +56,7 @@ entrance.add(simpleWall);
 var simpleWallFace1=[[spigolo, primoblocco],[3]];
 simpleWall1=makeWallCover(simpleWallFace1,[],entranceWallTexture);
 simpleWall1.rotation.x=Math.PI/2;
-simpleWall1.position.set(0, entranceSize[1].reduce(somma)-margine, spigolo);
+simpleWall1.position.set(0, entranceSize[1].reduce(somma)-1.46-spigolo*1.95, spigolo);
 entrance.add(simpleWall1);
 
 //wall next the door
@@ -65,7 +65,7 @@ simpleWall2.rotation.y=-Math.PI/2;
 simpleWall2.position.set(entranceSize[0].reduce(somma)-spigolo-margine,spigolo, spigolo);
 entrance.add(simpleWall2);
 
-var externalFloorCover=[[spigolo+primoblocco, spigolo+xscala*2+spigolo],[spigolo+ yscala*2, spigolo+3.10+spigolo+1.64] ]
+var externalFloorCover=[[spigolo+primoblocco, spigolo+xscala*2+spigolo],[spigolo+ yscala*2, spigolo+3.10] ]
 externalFloor=makeWallCover(externalFloorCover, [[1,1]], entranceFloorTexture)//da definire ancora
 externalFloor.position.setZ(spigolo+margine)
 entrance.add(externalFloor);
@@ -98,27 +98,44 @@ entrance.add(atriumFloor);
 var mainDoor=mkDoor(xporta,zporta, spigolo, entranceDoor1, entranceDoor2);
 mainDoor.position.set(spigolo*2+primoblocco+spigolo, spigolo+yscala*2, spigolo);
 // door.getObjectByName(rotationNode, false).rotation.z=Math.PI/4;
-toIntersect.push(mainDoor);
 entrance.add(mainDoor);
 
 var entranceWindow = mkWindowWithHandle(xfinestra,zfinestra,spigolo, windowMetal, windowHandleColor);
 entranceWindow.position.set((primoblocco*0.5-(xfinestra/2))+spigolo,0,3*0.3+spigolo);
-toIntersect.push(entranceWindow);
 entranceWindow.getObjectByName(rotationNode).rotation.z=Math.PI/4;
 entrance.add(entranceWindow);
 
 var entranceWindow2 = mkWindowWithHandle(xfinestra,zfinestra,spigolo, windowMetal, windowHandleColor);
 entranceWindow2.position.set(spigolo+primoblocco+xscala-xfinestra+spigolo/2,0,3*0.3+spigolo);
-toIntersect.push(entranceWindow2);
 entrance.add(entranceWindow2);
 
 var entranceWindow3 = mkWindowWithHandle(xfinestra,zfinestra,spigolo, windowMetal, windowHandleColor);
 entranceWindow3.position.set(spigolo*2.5+primoblocco+xscala,0,3*0.3+spigolo);
-toIntersect.push(entranceWindow3);
 entrance.add(entranceWindow3);
 
 var doorAtrium = mkDoor(xporta+spigolo/2,zporta,spigolo, atriumDoorTexture);
 doorAtrium.rotation.z=Math.PI/2;
 doorAtrium.position.set(primoblocco+spigolo*3+xscala*2,spigolo*1.5+yscala*2+3.10-xporta,spigolo);
-toIntersect.push(doorAtrium);
 entrance.add(doorAtrium);
+
+var atriumForniture = loadAtriumForniture (0x362300,0x5c3d04,0x667797);
+atriumForniture.scale.set(0.2,0.2,0.2);
+atriumForniture.rotation.y=Math.PI/2;
+atriumForniture.position.set((spigolo+primoblocco+spigolo)*houseScalex, spigolo*houseScalez,-(spigolo+ yscala*2+ spigolo+ 3.10*0.5)*houseScaley );
+scene.add(atriumForniture);
+
+var atriumLamp = loadChandalier('lampadario.mtl');
+atriumLamp.position.set(houseScalex*(spigolo*2+primoblocco+xscala),houseScalez*(2.5),-houseScaley*(spigolo+yscala*2+spigolo+ 3.1/2) );
+atriumLamp.scale.set(2,2,2);
+var atriumSpotlight=atriumLamp.getLight();
+lights.push(atriumSpotlight);
+scene.add(atriumLamp);
+scene.add(atriumSpotlight);
+
+var externalLamp = loadChandalier('lampadario.mtl');
+externalLamp.position.set(houseScalex*(spigolo*2+primoblocco+xscala),houseScalez*(2.5),-houseScaley*(spigolo+yscala) );
+externalLamp.scale.set(2,2,2);
+var externalSpotlight=externalLamp.getLight();
+lights.push(externalSpotlight);
+scene.add(externalLamp);
+scene.add(externalSpotlight);

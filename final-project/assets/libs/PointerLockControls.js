@@ -23,6 +23,7 @@ THREE.PointerLockControls = function ( camera ) {
 
 	var isOnObject = false;
 	var canJump = false;
+	var allowJump=false//modificato
 
 	var prevTime = performance.now();
 
@@ -68,7 +69,7 @@ THREE.PointerLockControls = function ( camera ) {
 				break;
 
 			case 32: // space
-				if ( canJump === true ) velocity.y += 350;
+				if ( canJump === true && allowJump) velocity.y += 350;
 				canJump = false;
 				break;
 

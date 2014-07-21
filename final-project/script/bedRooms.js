@@ -60,7 +60,6 @@ bigBedRoom.add(bigBedRoomFloor);
 var bedRoomsDoor = mkDoor(xporta,zporta,spigolo,bedRoomDoorTexture);
 bedRoomsDoor.rotation.z=Math.PI/2;
 bedRoomsDoor.position.set(0,entranceSize[1].reduce(somma)-kitchenSize[1].reduce(somma)+1.46+spigolo,0);
-toIntersect.push(bedRoomsDoor);
 bigBedRoom.add(bedRoomsDoor);
 
 var balconyDoor= mkDoubleWindow(xporta,zporta, spigolo, lBRWindowTexture);
@@ -68,19 +67,31 @@ balconyDoor.rotation.z=Math.PI/2;
 balconyDoor.position.set(spigolo+3.73+spigolo,(4.3/2-xporta),0);
 bigBedRoom.add(balconyDoor);
 
-var singleBed= new THREE.Object3D({name:'singleBed'});
-
 //loaded object
 var singleBed = loadSingleBed(0x40955a,0xFFFFFF,0x43330a,0x756335);
 singleBed.scale.set(0.065,0.07,0.07);
 singleBed.rotation.y=Math.PI/2;
-singleBed.position.set(160,13,-210);
+singleBed.position.set(160,13,-215);
 scene.add(singleBed);
 
 var singleBed2 = loadSingleBed(0x40955a,0x743436,0x43330a,0x756335);
 singleBed2.scale.set(0.065,0.07,0.07);
 singleBed2.position.set(180,13,-230);
 scene.add(singleBed2);
+
+var wardRobe= loadWardrobe ('mobileAzzurro.mtl');
+wardRobe.scale.set(0.3,.2,.3);
+wardRobe.rotation.y=Math.PI;
+wardRobe.position.set((entranceSize[0].reduce(somma)+bigBedRoomSize[0][1])*houseScalex, spigolo*houseScalez, -(kitchenSize[1].reduce(somma))*houseScaley);
+scene.add(wardRobe);
+
+var bBRLamp =loadChandalier('lampadario.mtl');
+bBRLamp.scale.set(2,2,2);
+bBRLamp.position.set((bigBedRoomSize[0][1]*0.5+spigolo+entranceSize[0].reduce(somma))*houseScalex,(2.5+spigolo)*houseScalez,-(bigBedRoomSize[1].reduce(somma)*0.5+ kitchenSize[1].reduce(somma))*houseScaley);
+scene.add(bBRLamp);
+var bBRLight=bBRLamp.getLight(5*houseScale);
+scene.add(bBRLight);
+lights.push(bBRLight);
 
 //*********************littleBedRoom
 littleBedRoomSize = [[spigolo, primoblocco+spigolo+xscala*2, spigolo], [spigolo,3.04,spigolo]];
@@ -117,7 +128,6 @@ littleBedRoom.add(littleBedRoomFloor);
 //window
 var lbrWindow1 = mkDoubleWindow(xfinestra,zfinestra,spigolo, lBRWindowTexture, 0x737c7c);
 lbrWindow1.rotation.z=Math.PI;
-lbrWindow1.interact();
 lbrWindow1.position.set(spigolo+littleBedRoomSize[0][1]/2-xfinestra*2.5+xfinestra*2,littleBedRoomSize[1].reduce(somma), 3*.3);
 littleBedRoom.add(lbrWindow1);
 
@@ -126,41 +136,92 @@ lbrWindow2.rotation.z=Math.PI;
 lbrWindow2.position.set(spigolo+littleBedRoomSize[0][1]/2-xfinestra*2.5+xfinestra*2+xfinestra*3,littleBedRoomSize[1].reduce(somma), 3*.3);
 littleBedRoom.add(lbrWindow2);
 
+var dbed = loadDoubleBed (0x401a8b, 0x124063, 0x124063);
+dbed.rotation.y=-Math.PI/2;
+dbed.scale.set(0.23,0.23,0.23);
+dbed.position.set(littleBedRoomSize[0].reduce(somma)*.24*houseScalex,spigolo*houseScalez,-(entranceSize[1].reduce(somma)+littleBedRoomSize[1].reduce(somma)*.40)*houseScaley );
+scene.add(dbed);
+
+var wardRobe1= loadWardrobe ('mobileAzzurro1.mtl');
+wardRobe1.scale.set(0.2,.15,.1);
+wardRobe1.rotation.y=-Math.PI/2;
+wardRobe1.position.set((littleBedRoomSize[0].reduce(somma)-spigolo)*houseScalex,spigolo*houseScalez,-(entranceSize[1].reduce(somma))*houseScaley-130*0.3);
+scene.add(wardRobe1);
+
+var lBRLamp =loadChandalier('lampadario.mtl');
+lBRLamp.scale.set(2,2,2);
+lBRLamp.position.set((littleBedRoomSize[0][1]*0.5+spigolo)*houseScalex,(2.5+spigolo)*houseScalez,-(littleBedRoomSize[1].reduce(somma)*0.5+entranceSize[1].reduce(somma))*houseScaley);
+scene.add(lBRLamp);
+var lBRLight=lBRLamp.getLight(5*houseScale);
+scene.add(lBRLight);
+lights.push(lBRLight);
 
 //***********bathroom
-var bathRoomSize = [[spigolo, xscala*2, spigolo],[spigolo, 1.64]]
+var bathRoomSize = [[primoblocco,spigolo, xscala*2,spigolo],[spigolo, 1.64]]
 
 var bathRoom= new THREE.Object3D();
-bathRoom.position.set(spigolo+primoblocco,entranceSize[1].reduce(somma)-spigolo-1.64,spigolo);
+bathRoom.position.set(spigolo,entranceSize[1].reduce(somma)-spigolo-1.64,spigolo);
 house.add(bathRoom);
 
-var bathRoomFloor = makeWallCover([ [bathRoomSize[0][1]],[bathRoomSize[1][1]]],[], bathRoomFloorTexture, undefined, 4,4);
-bathRoomFloor.position.set(spigolo, spigolo, margine);
+var bathRoomFloor = makeWallCover([ [bathRoomSize[0].reduce(somma)-spigolo],[bathRoomSize[1][1]]],[], bathRoomFloorTexture, undefined, 4,4);
+bathRoomFloor.position.set(0, spigolo, margine);
 bathRoom.add(bathRoomFloor); 
 
-var bathRoomWallN = makeWallCover([[xscala*2-xporta-0.04,xporta,0.04],[zporta, 3-zporta]],[[1,0]], bathRoomWallTexture);
+var bathRoomWallN = makeWallCover([[primoblocco+xscala*2-xporta-0.04+spigolo,xporta,0.04],[zporta, 3-zporta]],[[1,0]], bathRoomWallTexture);
 bathRoomWallN.rotation.x= Math.PI/2;
-bathRoomWallN.position.set(spigolo,bathRoomSize[1].reduce(somma)-margine,0);
+bathRoomWallN.position.set(0,bathRoomSize[1].reduce(somma)-margine,0);
 bathRoom.add(bathRoomWallN); 
 
-var bathRoomWallS = makeWallCover([[bathRoomSize[0][1]],[3]],[], bathRoomWallTexture);
+var bathRoomWallS = makeWallCover([[bathRoomSize[0].reduce(somma)-spigolo],[3]],[], bathRoomWallTexture);
 bathRoomWallS.rotation.x= -Math.PI/2;
-bathRoomWallS.position.set(spigolo,spigolo+margine,3);
+bathRoomWallS.position.set(0,spigolo+margine,3);
 bathRoom.add(bathRoomWallS);
 
 var bathRoomWallE = makeWallCover([[3],[bathRoomSize[1][1]]],[], bathRoomWallTextureR);
 bathRoomWallE.rotation.y=Math.PI/2;
-bathRoomWallE.position.set(spigolo+margine,spigolo,3);
+bathRoomWallE.position.set(margine,spigolo,3);
 bathRoom.add(bathRoomWallE);
 
 var bathRoomWallW = makeWallCover([[3],[bathRoomSize[1][1]]],[], bathRoomWallTextureR);
 bathRoomWallW.rotation.y=-Math.PI/2;
-bathRoomWallW.position.set(spigolo+xscala*2-margine,spigolo,0);
+bathRoomWallW.position.set(bathRoomSize[0].reduce(somma)-margine-spigolo,spigolo,0);
 bathRoom.add(bathRoomWallW);
 
 //door
 var bathRoomDoor = mkDoor(xporta,zporta,spigolo, bathRoomDoorTexture1,bathRoomDoorTexture);
 bathRoomDoor.rotation.z=Math.PI;
-bathRoomDoor.position.set(xscala*2-0.04+spigolo,bathRoomSize[1].reduce(somma)+spigolo,0);
-toIntersect.push(bathRoomDoor);
+bathRoomDoor.position.set(primoblocco+xscala*2-0.04+spigolo,bathRoomSize[1].reduce(somma)+spigolo,0);
 bathRoom.add(bathRoomDoor);
+
+//loaded obj
+var shower= loadShower(0x02f78b);
+shower.scale.set(0.4,0.2,0.4);
+shower.position.set();
+shower.rotation.y=-Math.PI/2;
+shower.position.set(spigolo*houseScalex+70*0.4,spigolo*houseScalez,-(entranceSize[1].reduce(somma)-1.64)*houseScaley-70*0.4);
+scene.add(shower);
+
+var wc = loadWc(0xFFFFFF);
+wc.rotation.y=Math.PI;
+wc.scale.set(0.23,0.23,0.23);
+wc.position.set( (spigolo+bathRoomSize[0].reduce(somma)*0.40)*houseScalex,spigolo*houseScalez,-(entranceSize[1].reduce(somma)-1.64)*houseScaley);
+scene.add(wc);
+
+var sink=loadLavatory(0x187092,0x667797,0x0c3d97,0xcbca89,0xfffffE,0xDCDCDC);
+sink.scale.set(0.2,0.2,0.2);
+sink.position.set( (spigolo+bathRoomSize[0].reduce(somma)*0.70)*houseScalex,spigolo*houseScalez-5,-(entranceSize[1].reduce(somma)-1.64)*houseScaley);
+scene.add(sink);
+
+var bidet=loadBidet(0xffffff,0x667797);
+bidet.scale.set(0.23,0.23,0.23);
+bidet.rotation.y=Math.PI;
+bidet.position.set((spigolo+bathRoomSize[0].reduce(somma)*0.58)*houseScalex,spigolo*houseScalez,-(entranceSize[1].reduce(somma)-1.64)*houseScaley);
+scene.add(bidet);
+
+var bRLamp =loadChandalier('lampadario.mtl');
+bRLamp.scale.set(2,2,2);
+bRLamp.position.set((bathRoomSize[0].reduce(somma)-2*spigolo)*0.5*houseScalex,(2.5+spigolo)*houseScalez,-(bathRoomSize[1].reduce(somma)*0.5+entranceSize[1].reduce(somma)-spigolo-1.64)*houseScaley);
+scene.add(bRLamp);
+var bRLight=bRLamp.getLight(5*houseScale);
+scene.add(bRLight);
+lights.push(bRLight);

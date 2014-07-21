@@ -108,7 +108,7 @@ portaSalone= assemblyDiagram([[spigolo],[spigolo/2,xporta,(3.10-2.5)],[zporta,1]
 portaPrincipale=assemblyDiagram([[spigolo,xporta,(2.14-spigolo-1)],[.3],[zporta,1]])
 facciataInterna=assemblyDiagram([[(primoblocco*0.5-(xfinestra/2)), xfinestra,(primoblocco*0.5-(xfinestra/2))], [spigolo], [3*.3, zfinestra, 3*0.7-zfinestra] ])
 facciataEsterna=assemblyDiagram([[xscala-xfinestra-spigolo/2, xfinestra, spigolo, xfinestra, xscala-xfinestra-spigolo/2],[spigolo],[3*.3, zfinestra, 3*0.7-zfinestra]])
-#mostraNumeroCelle(facciataEsterna,RED,2)
+# mostraNumeroCelle(facciataEsterna,RED,2)
 ingresso = diagram2cell(portaSalone,ingresso,82) 
 ingresso = diagram2cell(portaPrincipale,ingresso,61)
 ingresso=diagram2cell(facciataEsterna, ingresso, 55)
@@ -116,7 +116,7 @@ ingresso=diagram2cell(facciataInterna, ingresso, 19)
 # mostraNumeroCelle(ingresso,RED,1)
 
 #costruisco la lista degli oggetti da eliminare
-listaInternoEsteriore=[4,21,39,7,24,10,27,13,30,16,33]+[61,67,33, 56]
+listaInternoEsteriore=[4,21,39,7,24,10,27,13,51,33]+[61,67,33, 56]
 
 #aggiungo gli spazi interni vuoti della parte destra
 listaPortafinestre= [94,90, 117,102,108]
@@ -128,7 +128,7 @@ ingressoMesh =extractTriaFacets(ingresso, lista)
 
 #DRAW(ingressoMesh)
 
-#objExporter(ingressoMesh, "ingresso.obj")
+objExporter(ingressoMesh, "ingresso.obj")
 
 ############################CAMERA
 cameraPattern= [[spigolo, primoblocco+spigolo+xscala*2, spigolo], [spigolo,3.04,spigolo],[spigolo, 3, spigolo]]

@@ -16,6 +16,7 @@ var entranceWallTexture='muroLatericium.jpg';
 var entranceFloorTexture='piastrelleMarmo.jpg';
 var rotationNode='rotationNode';
 var rotationNode1='rotationNode1';
+var interactNode='intercatNode';
 var handleNode='handle';
 
   //patches are holes and they are coordinates of hole
@@ -70,7 +71,7 @@ function createTexturedMesh(geom, imageFile, mat, textureRepeatX, textureRepeatY
   // var mat = new THREE.MeshBasicMaterial();
   // var mat = new THREE.MeshLambertMaterial();
   if(mat === undefined)
-    mat = new THREE.MeshPhongMaterial();
+    mat = new THREE.MeshLambertMaterial();
   
   if(textureRepeatX!== undefined){
     texture.wrapS=texture.wrapT=THREE.RepeatWrapping;
@@ -154,7 +155,6 @@ function mkDoorHinge(x,z,y,outsideColor){
 	staticElement.add(coverRigth);
 
 	var coverLeft = makeWallCover([[y],[z]],[],outsideColor);
-	coverLeft
 	coverLeft.rotation.y=-Math.PI/2;
 	coverLeft.rotation.z=-Math.PI/2;
 	coverLeft.position.set(x,y,0);
@@ -177,9 +177,9 @@ function mkDoor ( x,z,y,outsideColor, innerColor, handleColor) {
 		innerColor=outsideColor;
 	
 	var nodeUP = new THREE.Object3D();
-	var orizontalPanelG =[x, y*0.8, z*0.4*0.2];
-	var verticalPanelG = [x*0.2, y*0.8, z*0.4*0.8];
-	var innerPanel = [x*0.6, y*0.6, z*0.4*0.8];
+	var orizontalPanelG =[x, y*0.5, z*0.4*0.2];
+	var verticalPanelG = [x*0.2, y*0.5, z*0.4*0.8];
+	var innerPanel = [x*0.6, y*0.3, z*0.4*0.8];
 	var mesh = boxGenerator(orizontalPanelG, outsideColor);
 	mesh.position.add(new THREE.Vector3(0,0,z*0.4*0.8));
 	nodeUP.add(mesh);
@@ -206,15 +206,16 @@ function mkDoor ( x,z,y,outsideColor, innerColor, handleColor) {
 	mesh.position.add(new THREE.Vector3(x*0.2, y*0.1, z*0.4*0.2));
 	nodeDown.add(mesh);
 
-	var middlePanel = [x, y*0.8, z*0.2];
+	var middlePanel = [x, y*0.5, z*0.2];
 	mesh= boxGenerator(middlePanel, outsideColor);
 	mesh.position.add(new THREE.Vector3(0,0,z*0.4));
 
 	//make the handle
 	var handle=mkHandle(x,z,y);
-	handle.position.set(x*0.8, y*0.8, z*0.5);
+	handle.position.set(x*0.8, y*0.5, z*0.5);
 
 	var handle2=mkHandle(x,z,y);
+	handle2.name+='1';
 	handle2.rotation.x=Math.PI;
 	handle2.position.set(x*0.8,0, z*0.5);
 
@@ -229,8 +230,12 @@ function mkDoor ( x,z,y,outsideColor, innerColor, handleColor) {
 
 	//con una rotazione di inner Door rispetto all'asse z dovrebbe generarsi l'apertura della porta
 	var global=mkDoorHinge(x,z,y,outsideColor);
+	global.name=interactNode;
 	global.add(innerDoor);
+	global.open=false;
 
+	global.interact=doorAnimation;
+	toIntersect.push(global);
 	return global;
 }
 
@@ -241,8 +246,8 @@ function mkSimpleWindow(x,z,y,outsideColor){
 		outsideColor='window-metal.jpeg';
 	
 	var nodeUP = new THREE.Object3D();
-	var orizontalPanelG =[x, y*0.8, z*0.1];
-	var verticalPanelG = [x*0.1, y*0.8, z];
+	var orizontalPanelG =[x, y*0.2, z*0.1];
+	var verticalPanelG = [x*0.1, y*0.2, z];
 	
 	var mesh = boxGenerator(orizontalPanelG, outsideColor);
 	mesh.position.add(new THREE.Vector3(0,0,z*0.9));
@@ -255,12 +260,13 @@ function mkSimpleWindow(x,z,y,outsideColor){
 	mesh=boxGenerator(orizontalPanelG,outsideColor);
 	nodeUP.add(mesh);
 
-	var glassPanelG =new  THREE.BoxGeometry(x*0.8, y*0.6, z*0.8);  
+	var glassPanelG =new  THREE.BoxGeometry(x*0.8, y*0.1, z*0.8);  
 	var glassMaterial =new  THREE.MeshLambertMaterial({ ambient: 0x030303, color:0xFFFFFF,  shading: THREE.FlatShading, opacity:0.3, transparent:true });
 	var glass=new THREE.Mesh(glassPanelG,glassMaterial);
-	glass.position.set(x*0.5,y*0.4, z*0.5);
+	glass.position.set(x*0.5,y*0.05, z*0.5);
 	nodeUP.add(glass);
 	nodeUP.name=rotationNode;
+	nodeUP.position.setY(0.4*y);
 	return nodeUP;
 }
 
@@ -269,12 +275,18 @@ function mkWindowWithHandle(x,z,y,outsideColor,handleColor){
 	var nodeUP=mkSimpleWindow(x,z,y,outsideColor);
 
 	var handle= mkHandle(x,z,y, handleColor)
-	handle.position.set(x*0.95, y*0.8, z/2);
+	handle.position.set(x*0.95, y*0.2, z/2);
 	nodeUP.add(handle);
 
 	var hinge=mkDoorHinge(x,z,y, outsideColor);
 
+	hinge.name=interactNode;
 	hinge.add(nodeUP);
+	hinge.open=false;
+
+	//see animation.js
+	hinge.interact = singleWindowAnimation;
+	toIntersect.push(hinge);		
 	return hinge;
 }
 
@@ -284,8 +296,8 @@ function mkDoubleWindow(x,z,y,outsideColor,handleColor){
 		outsideColor='window-metal.jpeg';
 	
 	var nodeLeft = new THREE.Object3D();
-	var orizontalPanelG =[x, y*0.8, z*0.1];
-	var verticalPanelG = [x*0.1, y*0.8, z];
+	var orizontalPanelG =[x, y*0.2, z*0.1];
+	var verticalPanelG = [x*0.1, y*0.2, z];
 	
 	var mesh = boxGenerator(orizontalPanelG, outsideColor);
 	mesh.position.add(new THREE.Vector3(-x,0,z*0.9));
@@ -299,28 +311,98 @@ function mkDoubleWindow(x,z,y,outsideColor,handleColor){
 	mesh=boxGenerator(orizontalPanelG,outsideColor);
 	mesh.position.add(new THREE.Vector3(-x,0,0));
 	nodeLeft.add(mesh);
-	var glassPanelG =new  THREE.BoxGeometry(x*0.8, y*0.6, z*0.8);  
+	var glassPanelG =new  THREE.BoxGeometry(x*0.8, y*0.1, z*0.8);  
 	var glassMaterial =new  THREE.MeshLambertMaterial({ ambient: 0x030303, color:0xFFFFFF,  shading: THREE.FlatShading, opacity:0.3, transparent:true });
 	var glass=new THREE.Mesh(glassPanelG,glassMaterial);
-	glass.position.set(-x*0.5,y*0.4, z*0.5);
+	glass.position.set(-x*0.5,y*0.05, z*0.5);
 	nodeLeft.add(glass);
 	nodeLeft.name=rotationNode1;
 	nodeLeft.position.setX(2*x);
+	nodeLeft.position.setY(0.4*y);
 
 	var nodeRigth = mkSimpleWindow(x,z,y,outsideColor,handleColor);
 	var handle= mkHandle(x,z,y, handleColor)
-	handle.position.set(x*0.95, y*0.8, z/2);
+	handle.position.set(x*0.95, y*0.2, z/2);
 	nodeRigth.add(handle);
 	// nodeRigth.position.setX(x);
 
 	var hinge=mkDoorHinge(x*2,z,y, outsideColor);
+	hinge.name=interactNode;
+	hinge.open=false;
 	hinge.add(nodeRigth);
 	hinge.add(nodeLeft);
 
-	hinge.interact = function(){
-		hinge.getObjectByName(rotationNode).rotation.z=+Math.PI/4;
-		hinge.getObjectByName(rotationNode1).rotation.z=-Math.PI/4;
-	}
+	hinge.interact = duobleWindowAnimation;
+	toIntersect.push(hinge);
 
 	return hinge;
 }
+
+function videoTv (pattern){
+	var $video = $('#video');
+    var video = $video[0];
+    $video.hide();
+    
+    var texture = new THREE.Texture(video);
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    texture.format = THREE.RGBFormat;
+    texture.generateMipmaps = false;
+    texture.needsUpdate = true;
+    obj = scaleShape(pattern);
+    
+    var geom= makeSimpleWallCover(obj.pattern, []);
+    var shape = new THREE.ShapeGeometry(geom);
+    var mat=new THREE.MeshPhongMaterial();
+    mat.map = texture;
+  	var mesh = new THREE.Mesh(shape, mat);
+  	mesh.rotation.x=Math.PI/2;
+  	mesh.position.set(-0.5,-0.10001,-0.5)
+  	var tv = new THREE.BoxGeometry(1.1,0.1,1.1);
+  	var tv = new THREE.Mesh(tv, new THREE.MeshLambertMaterial({color:0x100E0F}));
+  	// tv.position.set(0.55,0.05,0.60);
+  	tv.add(mesh);
+
+  	var bottomTv = new THREE.Mesh(new THREE.BoxGeometry(0.55,0.1,0.1),new THREE.MeshLambertMaterial({color:0x100E0F}));
+  	bottomTv.position.set(0,0,-.60);
+  	tv.add(bottomTv);
+  	tv.scale.setX(obj.xScale);
+  	tv.scale.setY(obj.yScale);
+  	tv.name=interactNode;
+  	tv.on=false;
+  	tv.interact = function(){
+  		if (video.paused){ 
+  		    video.play(); 
+  		}else{ 
+  		    video.pause();
+  		}
+  		this.on=!this.on;
+  	}
+  	tv.update=function (){
+  		if (this.on && video.readyState === video.HAVE_ENOUGH_DATA) {
+  		    if (texture) texture.needsUpdate = true;
+  		}
+  	}
+  	UpdateHandler.add(tv);
+	toIntersect.push(tv);
+  	return tv;
+}
+
+function mkLight(distance,heigthScale,intensity){
+    if(intensity===undefined)intensity=1.0;
+    if(heigthScale===undefined)heigthScale=2.0;
+    if(distance===undefined)distance=3.8*houseScale;
+    var spotLight = new THREE.PointLight(0xffffff,intensity,distance);
+    var tolook= new THREE.Object3D();
+    tolook.position.setY(-1);
+    spotLight.add(tolook);
+    spotLight.target=tolook;
+    spotLight.visible=true;
+    spotLight.name=interactNode;
+    spotLight.interact=lightAnimation;
+
+    this.updateMatrixWorld();
+    spotLight.position.setFromMatrixPosition(this.matrixWorld);
+    spotLight.position.add(new THREE.Vector3(0,-6.7*heigthScale,0));
+    return spotLight;
+  }

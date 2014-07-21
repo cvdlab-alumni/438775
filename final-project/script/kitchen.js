@@ -72,15 +72,20 @@ kitchen.add(bedRoomWallCover);
 // door
 var doorLivingRoom = mkDoor(xporta,zporta,spigolo,atriumDoorTexture);
 doorLivingRoom.position.set(1.365+0.04,spigolo+5.88,0);
-toIntersect.push(doorLivingRoom);
 kitchen.add(doorLivingRoom);
 
 //obj loaded
-var kitchen = loadKitchen(0xA00333, 0xDDDDDD, 0xEEEfff, 0x000000, 0x1A4026);
-kitchen.rotation.y=Math.PI;
-kitchen.scale.set(0.31,0.26,0.31);
-kitchen.position.set(entranceSize[0].reduce(somma)*houseScalex+80*0.315,spigolo*houseScaley,-5*spigolo*houseScalex);
-scene.add(kitchen); 
+var kitchenFurniture = loadKitchen(0xD30000, 0xDDDDDD, 0xEEEfff, 0x000000, 0x1A4026);
+kitchenFurniture.rotation.y=Math.PI;
+kitchenFurniture.scale.set(0.31,0.26,0.31);
+kitchenFurniture.position.set(entranceSize[0].reduce(somma)*houseScalex+80*0.315,spigolo*houseScaley,-5*spigolo*houseScalex);
+scene.add(kitchenFurniture);
+
+var tableChairs = loadTableAndChairs(0x442219,0x4b312a);
+tableChairs.scale.set(0.6,0.6,0.6)
+tableChairs.position.set((entranceSize[0].reduce(somma)+0.25*kitchenSize[1].reduce(somma))*houseScalex,spigolo*houseScaley, -(0.7*kitchenSize[1].reduce(somma))*houseScalex);
+scene.add(tableChairs);
+
 
 //**********************************Living Room
 var livingRoom = new THREE.Object3D();
@@ -92,6 +97,28 @@ var livingRoomSideWall=makeWallCover([[3-zporta,zporta],[(5.88-xporta*3)/2, xpor
 livingRoomSideWall.rotation.y= Math.PI/2;
 livingRoomSideWall.position.set(spigolo+margine, spigolo, 3);
 livingRoom.add(livingRoomSideWall);
+
+var staticElement = new THREE.Object3D();
+var coverRigth = makeWallCover([[spigolo],[zporta]],[],livingRoomTexture);
+coverRigth.rotation.y=Math.PI/2;
+coverRigth.rotation.z=-Math.PI/2;
+coverRigth.position.set(margine,spigolo,zporta);
+staticElement.add(coverRigth);
+
+var coverLeft = makeWallCover([[spigolo],[zporta]],[],livingRoomTexture);
+coverLeft.rotation.y=-Math.PI/2;
+coverLeft.rotation.z=-Math.PI/2;
+coverLeft.position.set(xporta*3-margine,spigolo,0);
+staticElement.add(coverLeft);
+
+var coverUp = makeWallCover([[xporta*3],[spigolo]],[],livingRoomTexture);
+coverUp.rotation.x=Math.PI;
+coverUp.position.set(0,spigolo,zporta-margine);
+staticElement.add(coverUp);
+
+staticElement.rotation.z=Math.PI/2;
+staticElement.position.set(spigolo,spigolo+(5.88-xporta*3)/2,0)
+livingRoom.add(staticElement);
 
 var livingRoomWindowWall = makeWallCover([[3*.3, zfinestra, 3*0.7-zfinestra],[(5.88-xporta*2)/2,xporta*2, 5.88-(5.88+xporta*2)/2]],[[1,1]],livingRoomTexture);
 livingRoomWindowWall.rotation.y=-Math.PI/2;
@@ -110,5 +137,47 @@ livingRoom.add(lRSimpleWallSouth);
 
 var lRWindow = mkDoubleWindow(xporta,zfinestra,spigolo,lBRWindowTexture);
 lRWindow.rotation.z=Math.PI/2;
-lRWindow.position.set(3+spigolo, spigolo+(5.88-xporta*2)/2, 3*0.3);
+lRWindow.position.set(3+spigolo*2, spigolo+(5.88-xporta*2)/2, 3*0.3);
 livingRoom.add(lRWindow);
+
+var couch = loadCouch(0xffffff,0xf9664b);
+couch.rotation.y=-Math.PI/2;
+couch.scale.set(0.25,0.25,0.25);
+couch.position.set((entranceSize[0].reduce(somma)+kitchenSize[0].reduce(somma)*0.90)*houseScalex,spigolo*houseScaley,-spigolo*houseScalez-40 );
+scene.add(couch);
+
+var tvBottom=tvForniture (0xEEEfff, 0xDDDDDD, 0xf9664b);
+// tvBottom.rotation.y=Math.PI;
+tvBottom.scale.set(0.3,0.3,0.3);
+tvBottom.position.set((entranceSize[0].reduce(somma)+kitchenSize[0].reduce(somma)*0.68)*houseScalex,spigolo*houseScalez,-(kitchenSize[1].reduce(somma)-spigolo*2)*houseScaley );
+scene.add(tvBottom);
+
+var tv = videoTv([[1.0],[0.5]]);
+scene.add(tv);
+tv.scale.set(houseScalex,houseScaley,houseScalez);
+tv.rotation.x=-Math.PI/2;
+tv.position.set((entranceSize[0].reduce(somma)+kitchenSize[0].reduce(somma)*0.77)*houseScalex,(spigolo+1.25)*houseScalez,-(kitchenSize[1].reduce(somma)-spigolo*3)*houseScaley);
+
+var kitchenLamp =loadChandalier('lampadario.mtl');
+kitchenLamp.scale.set(2,2,2);
+kitchenLamp.position.set((entranceSize[0].reduce(somma)+kitchenSize[0].reduce(somma)*0.3)*houseScalex,(2.5)*houseScalez,-(kitchenSize[1].reduce(somma)*0.2)*houseScaley);
+scene.add(kitchenLamp);
+var kitchenLight=kitchenLamp.getLight();
+lights.push(kitchenLight);
+scene.add(kitchenLight);
+
+var kitchenLamp1 =loadChandalier('lampadario.mtl');
+kitchenLamp1.scale.set(2,2,2);
+kitchenLamp1.position.set((entranceSize[0].reduce(somma)+kitchenSize[0].reduce(somma)*0.3)*houseScalex,(2.5)*houseScalez,-(kitchenSize[1].reduce(somma)*0.7)*houseScaley);
+scene.add(kitchenLamp1);
+var kitchenLight1=kitchenLamp1.getLight();
+lights.push(kitchenLight1);
+scene.add(kitchenLight1);
+
+var kitchenLamp2 =loadChandalier('lampadario.mtl');
+kitchenLamp2.scale.set(3,3,3);
+kitchenLamp2.position.set((entranceSize[0].reduce(somma)+kitchenSize[0].reduce(somma)*0.8)*houseScalex,(2.5)*houseScalez,-(kitchenSize[1].reduce(somma)*0.5)*houseScaley);
+scene.add(kitchenLamp2);
+var kitchenLight2=kitchenLamp2.getLight(4*houseScale,3);
+lights.push(kitchenLight2);
+scene.add(kitchenLight2);

@@ -170,6 +170,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 	};
 
 	this.update = function( delta ) {
+		delta= delta||1;//modificato
 		var actualMoveSpeed = 0;
 		if ( !this.freeze ) {
 
